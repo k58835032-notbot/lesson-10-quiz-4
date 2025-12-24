@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Japanese Word Listening Quiz</title>
+
+  <style>
+
+    body {
+
+      font-family: "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
+
+      display:flex;
+
+      flex-direction:column;
+
+      align-items:center;
+
+      padding:40px;
+
+      color:#333;
+
+      text-align:center;
+
+    }
+
+    h1 {
+
+      color:#b23b3b;
+
+      font-size:2em;
+
+      margin-bottom:20px;
+
+    }
+
+    button {
+
+      font-size:18px;
+
+      padding:12px 24px;
+
+      margin:10px;
+
+      border-radius:12px;
+
+      cursor:pointer;
+
+      transition:.3s;
+
+    }
+
+    #playSound {
+
+      background:#fff;
+
+      color:#b23b3b;
+
+      border:3px solid #b23b3b;
+
+    }
+
+    #playSound:hover {
+
+      background:#ffe6f2;
+
+    }
+
+    .choice {
+
+      background:#b23b3b;
+
+      color:#fff;
+
+      border:2px solid #b23b3b;
+
+      padding:10px 18px;
+
+      margin:6px;
+
+      border-radius:10px;
+
+    }
+
+    .choice:hover {
+
+      background:#ff4da6;
+
+    }
+
+    #choices {
+
+      display:flex;
+
+      flex-wrap:wrap;
+
+      justify-content:center;
+
+      max-width:720px;
+
+    }
+
+    #result {
+
+      font-size:20px;
+
+      margin-top:18px;
+
+      font-weight:600;
+
+    }
+
+    .meta {
+
+      font-size:0.9rem;
+
+      color:#666;
+
+      margin-top:8px;
+
+    }
+
+    /* ===== End screen ===== */
+
+    #endScreen {
+
+      display:none;
+
+      margin-top:30px;
+
+      padding:30px 40px;
+
+      border-radius:20px;
+
+      background:linear-gradient(135deg,#ffe6f2,#fff);
+
+      box-shadow:0 12px 30px rgba(0,0,0,.15);
+
+      animation:fadeIn .6s ease;
+
+    }
+
+    #endScreen h2 {
+
+      color:#b23b3b;
+
+      font-size:1.8em;
+
+    }
+
+    #restartQuiz {
+
+      background:#b23b3b;
+
+      color:#fff;
+
+      border:none;
+
+    }
+
+    #restartQuiz:hover {
+
+      background:#ff4da6;
+
+    }
+
+    @keyframes fadeIn {
+
+      from {opacity:0; transform:translateY(10px);}
+
+      to {opacity:1; transform:translateY(0);}
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<h1>🎧 Japanese Word Listening Quiz</h1>
+
+<button id="playSound">▶️ Play Sound</button>
+
+<div id="choices"></div>
+
+<div id="result"></div>
+
+<div class="meta">Listen and choose the correct hiragana.</div>
+
+<!-- ===== End screen ===== -->
+
+<div id="endScreen">
+
+  <h2>🎉 Quiz Complete!</h2>
+
+  <p id="finalScore"></p>
+
+  <button id="restartQuiz">🔁 Restart</button>
+
+</div>
+
+<!-- ===== AUDIO (examples) ===== -->
+
+ <!-- AUDIO for Lesson 9 Quiz 3 -->
+<audio id="obasan"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/obasan.mp3"></audio>
+<audio id="obaasan" src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/obaasan.mp3"></audio>
+
+<audio id="ojisan"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/ojisan.mp3"></audio>
+<audio id="ojiisan" src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/ojiisan.mp3"></audio>
+
+<audio id="onisan"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/onisan.mp3"></audio>
+<audio id="oniisan" src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/oniisan.mp3"></audio>
+
+<audio id="kasan"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/kasan.mp3"></audio>
+<audio id="kaasan"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/kaasan.mp3"></audio>
+
+<audio id="yasai"     src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/yasai.mp3"></audio>
+<audio id="yasashii"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/yasashii.mp3"></audio>
+
+<audio id="chisai"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/chisai.mp3"></audio>
+<audio id="chiisai"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/chiisai.mp3"></audio>
+
+<audio id="hiku"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/hiku.mp3"></audio>
+<audio id="hiiku"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/hiiku.mp3"></audio>
+
+<audio id="hiki"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/hiki.mp3"></audio>
+<audio id="hiiki"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/hiiki.mp3"></audio>
+  
+<audio id="yume"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/yume.mp3"></audio>
+  <audio id="yuumei"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/yuumei.mp3"></audio>
+  
+  <audio id="yuki"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/yuki.mp3"></audio>
+  
+  <audio id="yuuki"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/yuuki.mp3"></audio>
+  
+  <audio id="koko"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/koko.mp3"></audio>
+
+  <audio id="kookoo"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/kookoo.mp3"></audio>
+  
+<audio id="midasu"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/midasu.mp3"></audio>
+<audio id="miidasu"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/miidasu.mp3"></audio>
+
+<audio id="kite"   src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/kite_kudasai.mp3"></audio>
+<audio id="kiite"  src="https://raw.githubusercontent.com/k58835032-notbot/lesson-10-table/main/kiite_kudasai.mp3"></audio>
+  
+<script>
+
+let currentQuestion = null;
+
+let questionCount = 0;
+
+let score = 0;
+
+const maxQuestions = 26;
+
+const quizQuestions = [
+
+  {
+    q: "obasan",
+    options: ["おばさん", "おばあさん", "おじさん", "おにさん"],
+    correct: "おばさん"
+  },
+  {
+    q: "obaasan",
+    options: ["おばあさん", "おばさん", "おじいさん", "おにいさん"],
+    correct: "おばあさん"
+  },
+  {
+    q: "kasan",
+    options: ["かさん", "かあさん", "きさん", "こさん"],
+    correct: "かさん"
+  },
+  {
+    q: "kaasan",
+    options: ["かあさん", "かさん", "おかさん", "かあすん"],
+    correct: "かあさん"
+  },
+  {
+    q: "onisan",
+    options: ["おにさん", "おにいさん", "おじさん", "おばさん"],
+    correct: "おにさん"
+  },
+  {
+    q: "oniisan",
+    options: ["おにいさん", "おにさん", "おじいさん", "おばあさん"],
+    correct: "おにいさん"
+  },
+  {
+    q: "ojisan",
+    options: ["おじさん", "おじいさん", "おばさん", "おにさん"],
+    correct: "おじさん"
+  },
+  {
+    q: "ojiisan",
+    options: ["おじいさん", "おじさん", "おばあさん", "おにいさん"],
+    correct: "おじいさん"
+  },
+  {
+    q: "yasai",
+    options: ["やさい", "やさしい", "ゆさい", "やさえ"],
+    correct: "やさい"
+  },
+  {
+    q: "yasashii",
+    options: ["やさしい", "やさい", "やさし", "ゆさしい"],
+    correct: "やさしい"
+  },
+  {
+    q: "chiisai",
+    options: ["ちいさい", "ちさい", "ちさえ", "ちさく"],
+    correct: "ちいさい"
+  },
+  {
+    q: "hiku",
+    options: ["ひく", "ひき", "ひいく", "ひいき"],
+    correct: "ひく"
+  },
+  {
+    q: "hiiku",
+    options: ["ひいく", "ひく", "ひき", "ひいき"],
+    correct: "ひいく"
+  },
+  {
+    q: "hiki",
+    options: ["ひき", "ひく", "ひいく", "ひいき"],
+    correct: "ひき"
+  },
+  {
+    q: "hiiki",
+    options: ["ひいき", "ひく", "ひき", "ひいく"],
+    correct: "ひいき"
+  },
+  {
+    q: "midase",
+    options: ["みだす", "みいだす", "みださ", "みいださ"],
+    correct: "みだす"
+  },
+  {
+    q: "miidasu",
+    options: ["みいだす", "みだす", "みださ", "みいださ"],
+    correct: "みいだす"
+  },
+  {
+    q: "kite",
+    options: ["きてください", "きいてください", "きてくださいー", "きいでください"],
+    correct: "きてください"
+  },
+  {
+    q: "kiite",
+    options: ["きいてください", "きてください", "きいてくださいー", "きいでください"],
+    correct: "きいてください"
+  },
+  {
+    q: "kookoo",
+    options: ["こうこう", "ここ", "こうこ", "ここう"],
+    correct: "こうこう"
+  },
+  {
+    q: "koko",
+    options: ["ここ", "こうこう", "ここう", "こうこ"],
+    correct: "ここ"
+  },
+  {
+    q: "yume",
+    options: ["ゆめ", "ゆうめい", "ゆめい", "ゆみ"],
+    correct: "ゆめ"
+  },
+  {
+    q: "yuumei",
+    options: ["ゆうめい", "ゆめ", "ゆうめ", "ゆうみ"],
+    correct: "ゆうめい"
+  },
+  {
+    q: "yuki",
+    options: ["ゆき", "ゆうき", "ゆきい", "ゆぎ"],
+    correct: "ゆき"
+  },
+  {
+    q: "yuuki",
+    options: ["ゆうき", "ゆき", "ゆきい", "ゆぎ"],
+    correct: "ゆうき"
+  }
+];
+
+
+
+
+function newQuestion() {
+
+  if (questionCount >= maxQuestions) {
+
+    document.getElementById("choices").innerHTML = "";
+
+    document.getElementById("playSound").style.display = "none";
+
+    document.getElementById("finalScore").textContent =
+
+      `Your score: ${score} / ${maxQuestions}`;
+
+    document.getElementById("endScreen").style.display = "block";
+
+    return;
+
+  }
+
+  questionCount++;
+
+  currentQuestion = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
+
+  const choicesDiv = document.getElementById("choices");
+
+  choicesDiv.innerHTML = "";
+
+  currentQuestion.options
+
+    .sort(() => Math.random() - 0.5)
+
+    .forEach(option => {
+
+      const btn = document.createElement("button");
+
+      btn.className = "choice";
+
+      btn.textContent = option;
+
+      btn.onclick = () => checkAnswer(option);
+
+      choicesDiv.appendChild(btn);
+
+    });
+
+  document.getElementById("result").textContent =
+
+    `Q ${questionCount} / ${maxQuestions}`;
+
+}
+
+function playCurrentSound() {
+
+  if (!currentQuestion) return;
+
+  const audio = document.getElementById(currentQuestion.q);
+
+  if (audio) {
+
+    audio.currentTime = 0;
+
+    audio.play();
+
+  }
+
+}
+
+function checkAnswer(answer) {
+
+  const result = document.getElementById("result");
+
+  if (answer === currentQuestion.correct) {
+
+    score++;
+
+    result.textContent = "✅ Correct!";
+
+    result.style.color = "#28a745";
+
+  } else {
+
+    result.textContent = `❌ ${currentQuestion.correct}`;
+
+    result.style.color = "#d63384";
+
+  }
+
+  setTimeout(newQuestion, 900);
+
+}
+
+document.getElementById("playSound").addEventListener("click", playCurrentSound);
+
+document.getElementById("restartQuiz").addEventListener("click", () => {
+
+  questionCount = 0;
+
+  score = 0;
+
+  document.getElementById("endScreen").style.display = "none";
+
+  document.getElementById("playSound").style.display = "inline-block";
+
+  newQuestion();
+
+});
+
+newQuestion();
+
+</script>
+
+</body>
+
+</html>
